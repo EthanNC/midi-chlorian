@@ -7,7 +7,7 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { useRouter } from "next/router";
 
-const AppLayout = (props) => {
+const AppLayout = (props: any) => {
   const { status, data: session } = useSession({
     required: false,
   });
@@ -92,21 +92,37 @@ const AppLayout = (props) => {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                      <Menu.Items className="origin-top-right cursor-pointer absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                         {status == "authenticated" ? (
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                onClick={() => signOut()}
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                Sign Out
-                              </a>
-                            )}
-                          </Menu.Item>
+                          <>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <a
+                                  onClick={() => router.push("/my-account")}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                >
+                                  {session?.user?.name ?? session.user?.email}
+                                </a>
+                              )}
+                            </Menu.Item>
+
+                            <Menu.Item>
+                              {({ active }) => (
+                                <a
+                                  onClick={() => signOut()}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                >
+                                  Sign Out
+                                </a>
+                              )}
+                            </Menu.Item>
+                          </>
                         ) : (
                           <Menu.Item>
                             {({ active }) => (

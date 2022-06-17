@@ -43,9 +43,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const users = await prisma.user.findMany(findManyArgs);
 
     return res.status(200).json(users);
-  } catch (error) {
+  } catch (error: any) {
     console.error("[api] user", error);
-    return res.status(500).json({ statusCode: 500, message: error.message });
+    return res.status(500).json({ statusCode: 500, message: error?.message });
   }
 };
 

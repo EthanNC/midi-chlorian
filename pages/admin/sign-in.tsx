@@ -11,7 +11,11 @@ type LoginFormValues = {
   password: string;
 };
 
-export default function Page({ csrfToken }) {
+type Props = {
+  csrfToken: string | undefined;
+};
+
+export default function Page({ csrfToken }: Props) {
   const [isSubmitting, setSubmitting] = React.useState(false);
 
   const { register, handleSubmit } = useForm();
@@ -57,8 +61,8 @@ export default function Page({ csrfToken }) {
           <div className="py-8 px-4 mx-2 rounded-sm sm:px-10">
             <form className="text-center" onSubmit={handleSubmit(onSubmit)}>
               <input
-                name="csrfToken"
                 {...register("csrfToken")}
+                name="csrfToken"
                 type="hidden"
                 defaultValue={csrfToken}
                 hidden
@@ -72,12 +76,12 @@ export default function Page({ csrfToken }) {
                 </label>
                 <div className="mt-1">
                   <input
+                    {...register("email")}
                     id="email"
                     name="email"
                     type="email"
                     autoComplete="email"
                     required
-                    {...register("email")}
                     className="appearance-none w-full font-medium py-3 border-b border-t-0 border-l-0 border-r-0 border-dashed outline-none text-xl text-center leading-6 bg-transparent placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 transition duration-150 ease-in-out"
                   />
                 </div>
@@ -94,13 +98,13 @@ export default function Page({ csrfToken }) {
                 </div>
                 <div className="mt-1">
                   <input
+                    {...register("password")}
                     id="password"
                     name="password"
                     type="password"
                     autoComplete="current-password"
                     minLength={12}
                     required
-                    {...register("password")}
                     className="appearance-none w-full font-medium py-3 border-b border-t-0 border-l-0 border-r-0 border-dashed outline-none text-xl text-center leading-6 bg-transparent placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 transition duration-150 ease-in-out"
                   />
                 </div>

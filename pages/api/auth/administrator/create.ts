@@ -23,7 +23,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
       message: "Admin created.",
       data: admin,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("[api] auth/administrator/create", error);
     return res.status(500).json({ statusCode: 500, message: error.message });
   }

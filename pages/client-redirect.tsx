@@ -20,7 +20,7 @@ const Page = () => {
       <AppLayout>
         <div>
           <h1>
-            Hello, {`${session.user.name ?? session.user.email}`} This is a
+            Hello, {`${session?.user?.name ?? session?.user?.email}`} This is a
             protected route. You can see it because you're logged in.
           </h1>
         </div>

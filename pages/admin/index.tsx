@@ -8,6 +8,8 @@ import AdminLayout from "@lib/components/Layouts/AdminLayout";
 import { getSession } from "@lib/auth/session";
 import superagent from "superagent";
 
+//TODO: REFACTOR this with typescript component inferencing types
+
 const statusStyles = {
   true: "bg-green-100 text-green-800",
   false: "bg-gray-100 text-gray-800",
@@ -17,7 +19,7 @@ function Page() {
   const router = useRouter();
   const {
     status,
-    data: { session },
+    // data: { session },
   } = useSession({
     required: true,
     onUnauthenticated() {
@@ -63,7 +65,7 @@ function Page() {
             className="mt-2 divide-y divide-gray-200 overflow-hidden  sm:hidden"
           >
             {usersQuery?.data &&
-              usersQuery.data.map((user) => {
+              usersQuery.data.map((user: any) => {
                 return (
                   <li key={user.email}>
                     <a className="block px-4 py-4 bg-white hover:bg-gray-50">
@@ -120,7 +122,7 @@ function Page() {
                   </thead>
                   <tbody className="bg-white ">
                     {usersQuery?.data &&
-                      usersQuery.data.map((user) => {
+                      usersQuery.data.map((user: any) => {
                         return (
                           <tr key={user.email} className="bg-white">
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -151,7 +153,7 @@ function Page() {
                             </td>
                             <td className="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                               {user?.accounts && user?.accounts?.length > 0 ? (
-                                user.accounts.map((account) => {
+                                user.accounts.map((account: any) => {
                                   return <p>{account.provider}</p>;
                                 })
                               ) : (
