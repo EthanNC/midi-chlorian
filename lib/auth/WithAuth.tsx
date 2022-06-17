@@ -3,7 +3,16 @@ import { useEffect } from "react";
 import router from "next/router";
 import Loader from "@lib/components/Loader";
 
-function WithAuth({ children, options }) {
+type Props = {
+  children: React.ReactNode;
+  options?: {
+    required?: boolean;
+    onUnauthenticated?: () => void;
+    redirectTo?: string;
+  };
+};
+
+function WithAuth({ children, options }: Props) {
   const { data: session, status } = useSession();
   const isUser = !!session?.user;
   useEffect(() => {

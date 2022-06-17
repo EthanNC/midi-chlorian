@@ -17,6 +17,7 @@ function MyApp({
     <SessionProvider session={session} refetchInterval={5 * 60}>
       <QueryClientProvider client={queryClient}>
         {Component.auth ? (
+          //@ts-ignore
           <WithAuth options={Component.auth}>
             <Component {...pageProps} />
           </WithAuth>
