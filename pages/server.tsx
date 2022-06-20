@@ -1,6 +1,7 @@
 import AppLayout from "@lib/components/Layouts/AppLayout";
 import { useSession } from "next-auth/react";
 import { getSession } from "@lib/auth/session";
+import { GetServerSidePropsContext } from "next/types";
 
 const Page = () => {
   const { status, data: session } = useSession({
@@ -45,7 +46,7 @@ const Page = () => {
   );
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       session: await getSession(context),

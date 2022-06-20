@@ -50,8 +50,8 @@ const Page = () => {
       <AppLayout title="With Session">
         <div>
           <h1>
-            Hello, {`${session.user.name ?? session.user.email}`} You can see
-            this because you're logged in.
+            Hello, {`${session?.user?.name ?? session?.user?.email}`} You can
+            see this because you're logged in.
           </h1>
           <blockquote>
             <p>

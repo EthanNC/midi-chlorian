@@ -23,6 +23,7 @@ export default NextAuth({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
+    //@ts-ignore
     CredentialsProvider({
       id: "app-login",
       name: "App Login",
@@ -42,7 +43,7 @@ export default NextAuth({
         try {
           let maybeUser = await prisma.user.findFirst({
             where: {
-              email: credentials.email,
+              email: credentials?.email,
             },
             select: {
               id: true,
@@ -54,7 +55,7 @@ export default NextAuth({
           });
 
           if (!maybeUser) {
-            if (!credentials.password || !credentials.email) {
+            if (!credentials?.password || !credentials.email) {
               throw new Error("Invalid Credentials");
             }
 
@@ -73,8 +74,8 @@ export default NextAuth({
             });
           } else {
             const isValid = await verifyPassword(
-              credentials.password,
-              maybeUser.password
+              credentials?.password as string,
+              maybeUser.password as string
             );
 
             if (!isValid) {
@@ -94,6 +95,7 @@ export default NextAuth({
         }
       },
     }),
+    //@ts-ignore
     CredentialsProvider({
       id: "admin-login",
       name: "Administrator Login",
@@ -112,7 +114,7 @@ export default NextAuth({
       async authorize(credentials) {
         let maybeUser = await prisma.user.findFirst({
           where: {
-            email: credentials.email,
+            email: credentials?.email,
           },
           select: {
             id: true,
@@ -132,8 +134,8 @@ export default NextAuth({
         }
 
         const isValid = await verifyPassword(
-          credentials.password,
-          maybeUser.password
+          credentials?.password as string,
+          maybeUser.password as string
         );
 
         if (!isValid) {
