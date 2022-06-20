@@ -19,10 +19,11 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { SearchIcon } from "@heroicons/react/solid";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
+//TODO: not using this component at the moment but if I do since I'm upgrading headlessui and it may change behavior of disclosure
 export default function NavigationBar() {
   return (
     <Disclosure as="nav" className="bg-white shadow">

@@ -11,7 +11,7 @@ const navigation = [
   { name: "Help", href: "#", current: false },
 ];
 
-const AdminLayout = (props) => {
+const AdminLayout = (props: any) => {
   return (
     <>
       <div className="min-h-full">
