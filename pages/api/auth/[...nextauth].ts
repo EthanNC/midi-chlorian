@@ -6,6 +6,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verifyPassword, hashPassword } from "@lib/auth/passwords";
 import { Session } from "@lib/auth/session";
 import prisma from "@db/index";
+import Stripe from "stripe";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -190,7 +191,9 @@ export default NextAuth({
         return;
       }
       // Create stripe API client using the secret key env variable
-      const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+        apiVersion: "2020-08-27",
+      });
 
       // Create a stripe customer for the user with their email address
       await stripe.customers
