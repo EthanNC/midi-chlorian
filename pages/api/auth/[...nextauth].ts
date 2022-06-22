@@ -23,6 +23,7 @@ export default NextAuth({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
+
     //@ts-ignore
     CredentialsProvider({
       id: "app-login",
@@ -51,6 +52,7 @@ export default NextAuth({
               password: true,
               name: true,
               role: true,
+              stripeId: true,
             },
           });
 
@@ -70,6 +72,7 @@ export default NextAuth({
                 password: true,
                 name: true,
                 role: true,
+                stripeId: true,
               },
             });
           } else {
@@ -88,6 +91,7 @@ export default NextAuth({
             email: maybeUser.email,
             name: maybeUser.name,
             role: maybeUser.role,
+            stripeId: maybeUser.stripeId,
           };
         } catch (error) {
           console.log(error);
@@ -177,6 +181,31 @@ export default NextAuth({
       };
 
       return sess;
+    },
+  },
+  events: {
+    signIn: async ({ user }) => {
+      //if a user already has a stripe Id exit
+      if (user.stripeId !== null || user.role !== "user") {
+        return;
+      }
+      // Create stripe API client using the secret key env variable
+      const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
+      // Create a stripe customer for the user with their email address
+      await stripe.customers
+        .create({
+          email: user.email!,
+        })
+        .then(async (customer: any) => {
+          // Use the Prisma Client to update the user in the database with their new Stripe customer ID
+          return prisma.user.update({
+            where: { id: user.id },
+            data: {
+              stripeId: customer.id,
+            },
+          });
+        });
     },
   },
 });

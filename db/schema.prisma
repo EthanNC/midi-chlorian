@@ -4,6 +4,7 @@
 datasource db {
     provider             = "mysql"
     url                  = env("DATABASE_URL")
+    shadowDatabaseUrl    = env("SHADOW_URL")
     referentialIntegrity = "prisma"
 }
 
@@ -53,9 +54,18 @@ model User {
     password      String?
     emailVerified DateTime?
     image         String?
-    role          String?   @default("user")
+    role          Role      @default(user)
     accounts      Account[]
     sessions      Session[]
+    stripeId      String?   @unique
+    // stripePlan    String?   @default("coupon")
+    isSubscribed  Boolean   @default(false)
+
+    // isAdmin       Boolean   @default(false)
+    // isSuperAdmin  Boolean   @default(false)
+    // isSupport     Boolean   @default(false)
+
+
 }
 
 model VerificationToken {
@@ -64,4 +74,11 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum Role {
+    user
+    admin
+    superadmin
+    support
 }

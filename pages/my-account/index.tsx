@@ -11,10 +11,9 @@ const Page = () => {
     required: false,
   });
 
-  const withAccountQuery = useQuery(
+  const { data, isLoading, error } = useQuery(
     ["my-session-account", session],
     async () => {
-      console.log(session);
       const data = await superagent.get("/api/with-session-account");
 
       return data.body;
@@ -29,7 +28,7 @@ const Page = () => {
     return "Loading or not authenticated...";
   }
 
-  console.log(" Profile", withAccountQuery);
+  console.log(" Profile", data);
 
   if (!session) {
     return (
@@ -61,17 +60,13 @@ const Page = () => {
             <br />
             You can see this because you're logged in.
           </h1>
-          {withAccountQuery?.data && <p>{withAccountQuery.data.content}</p>}
+          {data && <p>{data.content}</p>}
         </div>
 
         <Image src="/assets/profile.png" width={250} height={200} />
         <div>{session?.user?.email}</div>
-        {withAccountQuery?.data?.user?.id && (
-          <p>{withAccountQuery.data.user.id}</p>
-        )}
-        {withAccountQuery?.data?.user?.role && (
-          <p>{withAccountQuery.data.user.role}</p>
-        )}
+        {data?.user?.id && <p>{data.user.id}</p>}
+        {data?.user?.role && <p>{data.user.role}</p>}
         <button onClick={() => router.push("/admin")}>
           Go to admin dasboard
         </button>

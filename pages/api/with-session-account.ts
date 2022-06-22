@@ -1,6 +1,8 @@
 import { getSession } from "@lib/auth/session";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req, res) => {
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
 
   if (session) {
