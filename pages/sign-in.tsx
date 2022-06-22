@@ -53,7 +53,7 @@ export default function Page({ csrfToken }: Props) {
   return (
     <div className="min-h-screen  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <Head>
-        <title>Admin Sign In</title>
+        <title>Sign In</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center py-12">
