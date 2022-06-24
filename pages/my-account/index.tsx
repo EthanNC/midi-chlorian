@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import superagent from "superagent";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Page = () => {
   const router = useRouter();
@@ -24,11 +25,31 @@ const Page = () => {
     }
   );
 
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+
+  const goToCheckout = async () => {
+    setIsCheckoutLoading(true);
+    // const res = await fetch(`/api/stripe/create-checkout-session`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+
+    const data = await superagent.post("/api/stripe/create-checkout-session");
+
+    const { redirectUrl } = await data.body;
+    if (redirectUrl) {
+      window.location.assign(redirectUrl);
+    } else {
+      setIsCheckoutLoading(false);
+      console.log("Error creating checkout session");
+    }
+  };
+
   if (status === "loading") {
     return "Loading or not authenticated...";
   }
-
-  console.log(" Profile", data);
 
   if (!session) {
     return (
@@ -67,9 +88,27 @@ const Page = () => {
         <div>{session?.user?.email}</div>
         {data?.user?.id && <p>{data.user.id}</p>}
         {data?.user?.role && <p>{data.user.role}</p>}
-        <button onClick={() => router.push("/admin")}>
-          Go to admin dasboard
-        </button>
+        {data?.user?.role === "admin" && (
+          <button onClick={() => router.push("/admin")}>
+            Go to admin dasboard
+          </button>
+        )}
+        {data?.user?.role === "user" && !data?.user?.isSubscribed ? (
+          <div>
+            <button
+              onClick={() => {
+                if (isCheckoutLoading) return;
+                else goToCheckout();
+              }}
+            >
+              {isCheckoutLoading ? "Loading..." : "Add Payment Method"}
+            </button>
+          </div>
+        ) : (
+          <div className="font-bold text-2xl leading-relaxed">
+            Your are subscribed!
+          </div>
+        )}
       </AppLayout>
     </>
   );

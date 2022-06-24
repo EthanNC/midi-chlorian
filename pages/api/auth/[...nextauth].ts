@@ -4,7 +4,7 @@ import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { verifyPassword, hashPassword } from "@lib/auth/passwords";
-import { Session } from "@lib/auth/session";
+// import { Session } from "@lib/auth/session";
 import prisma from "@db/index";
 import Stripe from "stripe";
 
@@ -171,13 +171,20 @@ export default NextAuth({
 
       return token;
     },
-    async session({ session, token, user }) {
-      const sess: Session = {
+    async session({ session, token }) {
+      const dbUser = await prisma.user.findFirst({
+        where: {
+          id: token.id as string,
+        },
+      });
+
+      const sess = {
         ...session,
         user: {
           ...session.user,
           id: token.id as string,
           role: token.role as string,
+          isSubscribed: dbUser?.isSubscribed,
         },
       };
 

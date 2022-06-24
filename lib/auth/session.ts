@@ -9,6 +9,7 @@ type DefaultSessionUser = NonNullable<DefaultSession["user"]>;
 type SessionUser = DefaultSessionUser & {
   id: string;
   role: string;
+  isSubscribed: boolean;
 };
 
 export type Session = DefaultSession & {
